@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class ProductItem extends Component {
     state = {}
+
+    onDelete = (id) => {
+        if(confirm('Are you sure ?')){ //eslint-disable-line
+            this.props.onDelete(id);
+        }
+    }
     render() {
         var {index, product} = this.props;
         var statusName = product.status ? 'Còn hàng' : 'Hết hàng';
@@ -16,8 +23,8 @@ class ProductItem extends Component {
                     <span className={`label label-${statusClass}`}>{statusName}</span>
                 </td>
                 <td>
-                    <button type="button" className="btn btn-success mr-10">Sửa</button>
-                    <button type="button" className="btn btn-danger">Xoá</button>
+                    <Link to={`/product/${product.id}/edit`} className="btn btn-success mr-10">Sửa</Link>
+                    <button type="button" className="btn btn-danger"onClick={() => this.onDelete(product.id)}>Xoá</button>
                 </td>
             </tr>
         );

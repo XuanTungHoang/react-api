@@ -12,6 +12,22 @@ class ProductActionPage extends Component {
         }
     }
 
+    componentDidMount(){
+        var {match} = this.props;
+        if(match){
+            var id = match.params.id;
+            apiCall(`products/${id}`, 'get', null, null).then(res => {
+                var data = res.data;
+                this.setState({
+                    id: data.id,
+                    name: data.name,
+                    price: data.price,
+                    status: data.status
+                })
+            })
+        }
+    }
+
     onChange = (e) => {
         var target = e.target;
         var name = target.name;
@@ -23,25 +39,31 @@ class ProductActionPage extends Component {
 
     onSaveProduct = (e) => {
         e.preventDefault();
-        var {name, price, status} = this.state;
+        var { id, name, price, status } = this.state;
+        var { history } = this.props;
+        var url = 'https://60a765ac3b1e130017175fad.mockapi.io/products';
         var data = {
             name: name,
             price: price,
             status: status
         }
-        var querystring = require('querystring');
-        var url = 'https://60a765ac3b1e130017175fad.mockapi.io/products';
-        axios.post(url,
-            querystring.stringify(data), {
-            headers: { 
+        if (id) { // update
+            axios.put(`${url}/${id}`, data).then(res => {
+                console.log(res);
+                history.goBack();
+            })
+        } else { // add
+            var querystring = require('querystring');
+            axios.post(url,
+                querystring.stringify(data), {
+                headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
-            }).then(function(response) {
-                console.log(response);
+            }).then(function (response) {
+                history.goBack();
             });
+        }
         
-        var {history} = this.props;
-        history.goBack();
         // var headers = {"Content-Type": "application/x-www-form-urlencoded"}
         // apiCall('products', 'POST', headers, querystring.stringify({
         //     name: name,
@@ -54,6 +76,7 @@ class ProductActionPage extends Component {
 
     render() {
         var {name, price, status} = this.state;
+        var isChecked =  status === 'true' ? true : false;
         return (
             <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <form onSubmit={this.onSaveProduct}>
@@ -70,7 +93,7 @@ class ProductActionPage extends Component {
                     </div>
                     <div className="checkbox">
                         <label>
-                            <input type="checkbox" name="status" value={status} onChange={this.onChange} />
+                            <input type="checkbox" name="status" value={status} onChange={this.onChange} checked={isChecked} />
                             Còn hàng
                         </label>
                     </div>
