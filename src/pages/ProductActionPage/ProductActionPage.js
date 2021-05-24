@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import apiCall from '../../utils/apiCall';
 import axios from 'axios';
 class ProductActionPage extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             id: '',
@@ -12,9 +12,9 @@ class ProductActionPage extends Component {
         }
     }
 
-    componentDidMount(){
-        var {match} = this.props;
-        if(match){
+    componentDidMount() {
+        var { match } = this.props;
+        if (match) {
             var id = match.params.id;
             apiCall(`products/${id}`, 'get', null, null).then(res => {
                 var data = res.data;
@@ -62,31 +62,33 @@ class ProductActionPage extends Component {
             }).then(function (response) {
                 history.goBack();
             });
+
+            // var headers = { "Content-Type": "application/x-www-form-urlencoded" }
+            // apiCall('products', 'POST', headers, querystring.stringify({
+            //     name: name,
+            //     price: price,
+            //     status: status
+            // })).then(res => {
+            //     console.log(res);
+            // })
         }
-        
-        // var headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        // apiCall('products', 'POST', headers, querystring.stringify({
-        //     name: name,
-        //     price: price,
-        //     status: status
-        // })).then(res => {
-        //     console.log(res);
-        // })
+
+
     }
 
     render() {
-        var {name, price, status} = this.state;
-        var isChecked =  status === 'true' ? true : false;
+        var { name, price, status } = this.state;
+        var isChecked = status === 'true' ? true : false;
         return (
             <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <form onSubmit={this.onSaveProduct}>
                     <div className="form-group">
                         <label>Tên sản phẩm</label>
-                        <input type="text" className="form-control" name="name" value={name} onChange={this.onChange}/>
+                        <input type="text" className="form-control" name="name" value={name} onChange={this.onChange} />
                     </div>
                     <div className="form-group">
                         <label>Giá</label>
-                        <input type="number" className="form-control" name="price" value={price} onChange={this.onChange}/>
+                        <input type="number" className="form-control" name="price" value={price} onChange={this.onChange} />
                     </div>
                     <div className="form-group" >
                         <label>Trạng thái</label>

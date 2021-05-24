@@ -5,7 +5,7 @@ export default function callApi(endpoint, method = 'GET', headers = null, params
     return axios({
             method,
             url: `${Config.API_URL}/${endpoint}`,
-            params,
+            params
         },{
             headers,
         }).catch(err => {
